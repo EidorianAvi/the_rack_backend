@@ -3,7 +3,7 @@ class ShoesController < ApplicationController
     def index
         @shoes = Shoe.all
 
-        render json: { shoes: @shoes }
+        render json: @shoes
     end
 
     def show
@@ -20,7 +20,7 @@ class ShoesController < ApplicationController
             retail_price: params{:retail_price},
             colors: params[:colors],
             title: params[:title],
-            image: params[:image]
+            image: params[:image],
         )
 
         render json: @shoe, status: :created
