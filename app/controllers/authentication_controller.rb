@@ -1,13 +1,14 @@
 class AuthenticationController < ApplicationController
 
     def login
-        @user = User.find_by username: params[:username]
-
+        @user = User.find_by(username: params[:username])
+        # byebug  
         if !@user
-            render json: { error: "Incorrect Username or Password" }, status: :unauthrorized
+            render json: { errors: "Incorrect Login" }, status: :unauthorized
         else
             if !@user.authenticate params[:password]
-                render json: { error: "Incorrect Username or Password" }, status: :unauthorized
+                # byebug
+                render json: { errors: "Incorrect Login" }, status: :unauthorized
             else
                 payload = {
                     user_id: @user.id
@@ -15,7 +16,7 @@ class AuthenticationController < ApplicationController
                 secret = Rails.application.secret_key_base
                 token  = JWT.encode payload, secret
 
-                render json: { token: token }, status: :created
+                render json: { user: @user, token: token }, status: :created
             end
         end
     end
